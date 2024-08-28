@@ -65,7 +65,7 @@ bash
 
 Copy code
 
-git clone https://github.com/parv-meht08/Project/tree/main/React%20Projects/NewsApp
+git clone https://github.com/parv-meht08/NewsApp.git
 
 Navigate to the project directory
 
