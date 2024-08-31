@@ -170,3 +170,8 @@ For any questions or issues, feel free to reach out:
 GitHub: parv-meht08
 
 Email: mehtaparv21@gmail.com
+
+
+<b>Home</b>
+![NewsMonkey](https://github.com/user-attachments/assets/a7224202-187a-4405-9150-e28a2e370a1b)
+
