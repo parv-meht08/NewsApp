@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import NewsItem from './NewsItem';
-import Spinner from './spinner';
-import PropTypes from 'prop-types';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { useEffect, useState } from "react";
+import NewsItem from "./NewsItem";
+import Spinner from "./spinner";
+import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const News = (props) => {
   const [articles, setArticles] = useState([]);
@@ -16,7 +16,8 @@ const News = (props) => {
 
   const updateNews = async () => {
     props.setProgress(10);
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=af0e198748f74256be994a2c084c9965&page=${page}&pageSize=${props.pageSize}`;
+    const url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=f7214c0f036f4de1952c62e262a53127
+&page=${page}&pageSize=${props.pageSize}`;
     setLoading(true);
     let data = await fetch(url);
     props.setProgress(30);
@@ -35,7 +36,11 @@ const News = (props) => {
   }, []);
 
   const fetchMoreData = async () => {
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${
+      props.country
+    }&category=${props.category}&apiKey=${props.apiKey}&page=${
+      page + 1
+    }&pageSize=${props.pageSize}`;
     setPage(page + 1);
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -45,7 +50,10 @@ const News = (props) => {
 
   return (
     <>
-      <h1 className="text-center" style={{ margin: '35px 0px', marginTop: '90px' }}>
+      <h1
+        className="text-center"
+        style={{ margin: "35px 0px", marginTop: "90px" }}
+      >
         NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines
       </h1>
       {loading && <Spinner />}
@@ -62,13 +70,13 @@ const News = (props) => {
               return (
                 <div className="col-md-4" key={element.url}>
                   <NewsItem
-                    title={element.title || ''}
-                    description={element.description || ''}
-                    imageUrl={element.urlToImage || ''}
-                    newsUrl={element.url || ''}
-                    author={element.author || 'Unknown'}
-                    date={element.publishedAt || ''}
-                    source={element.source?.name || 'Unknown'}
+                    title={element.title || ""}
+                    description={element.description || ""}
+                    imageUrl={element.urlToImage || ""}
+                    newsUrl={element.url || ""}
+                    author={element.author || "Unknown"}
+                    date={element.publishedAt || ""}
+                    source={element.source?.name || "Unknown"}
                   />
                 </div>
               );
@@ -81,10 +89,10 @@ const News = (props) => {
 };
 
 News.defaultProps = {
-  country: 'in',
+  country: "in",
   pageSize: 8,
-  category: 'general',
-  apiKey: 'af0e198748f74256be994a2c084c9965',
+  category: "general",
+  apiKey: "f7214c0f036f4de1952c62e262a53127",
 };
 
 News.propTypes = {
