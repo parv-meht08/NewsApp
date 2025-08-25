@@ -15,37 +15,69 @@ const News = (props) => {
   };
 
   const updateNews = async () => {
-    props.setProgress(10);
-    const url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=f7214c0f036f4de1952c62e262a53127
-&page=${page}&pageSize=${props.pageSize}`;
-    setLoading(true);
-    let data = await fetch(url);
-    props.setProgress(30);
-    let parsedData = await data.json();
-    props.setProgress(70);
-    setArticles(parsedData.articles);
-    setTotalResults(parsedData.totalResults);
-    setLoading(false);
-    props.setProgress(100);
+    try {
+      props.setProgress(10);
+      // Keep the existing URL structure but add the category parameter
+      let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=95e68eb8e6054405bc5995328f5d3951`;
+      
+      // Add category parameter if it's not 'general'
+      if (props.category && props.category !== 'general') {
+        url += `&category=${props.category}`;
+      }
+      
+      console.log('Fetching news from:', url);
+      setLoading(true);
+      let response = await fetch(url);
+      console.log('Response status:', response.status);
+      let parsedData = await response.json();
+      console.log('API Response:', parsedData);
+      
+      if (!response.ok) {
+        throw new Error(parsedData.message || 'Failed to fetch news');
+      }
+      
+      props.setProgress(70);
+      setArticles(parsedData.articles || []);
+      setTotalResults(parsedData.totalResults || 0);
+      setLoading(false);
+      props.setProgress(100);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      setArticles([]);
+      setTotalResults(0);
+      setLoading(false);
+      props.setProgress(100);
+    }
   };
 
   useEffect(() => {
     document.title = `${capitalizeFirstLetter(props.category)} - NewsMonkey`;
     updateNews();
     // eslint-disable-next-line
-  }, []);
+  }, [props.category]);
 
   const fetchMoreData = async () => {
-    const url = `https://newsapi.org/v2/top-headlines?country=${
-      props.country
-    }&category=${props.category}&apiKey=${props.apiKey}&page=${
-      page + 1
-    }&pageSize=${props.pageSize}`;
-    setPage(page + 1);
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    setArticles((prevArticles) => prevArticles.concat(parsedData.articles));
-    setTotalResults(parsedData.totalResults);
+    try {
+      const nextPage = page + 1;
+      let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=95e68eb8e6054405bc5995328f5d3951&page=${nextPage}&pageSize=${props.pageSize}`;
+      
+      if (props.category && props.category !== 'general') {
+        url += `&category=${props.category}`;
+      }
+      
+      const response = await fetch(url);
+      const parsedData = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(parsedData.message || 'Failed to fetch more news');
+      }
+      
+      setPage(nextPage);
+      setArticles(prevArticles => [...prevArticles, ...(parsedData.articles || [])]);
+      setTotalResults(parsedData.totalResults || 0);
+    } catch (error) {
+      console.error('Error loading more news:', error);
+    }
   };
 
   return (
@@ -92,7 +124,7 @@ News.defaultProps = {
   country: "in",
   pageSize: 8,
   category: "general",
-  apiKey: "f7214c0f036f4de1952c62e262a53127",
+  apiKey: "95e68eb8e6054405bc5995328f5d3951",
 };
 
 News.propTypes = {
